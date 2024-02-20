@@ -2,3 +2,4 @@
 /src/main/resources/hibernate.properties
 /src/main/resources/logback.xml
 /.idea/
+*.iml
