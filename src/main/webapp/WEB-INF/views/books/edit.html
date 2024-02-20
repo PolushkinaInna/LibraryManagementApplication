@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Редагувати дані книги</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    </head>
+    <body class="container">
+
+        <header style="background-color: #F8F8F8; border-radius: 5px">
+            <br/>
+            <div class="container"> <!-- Меню -->
+            <a class="btn btn-default" href="/">Стартова сторінка</a>
+            <a class="btn btn-default" href="/books">Книги</a>
+            <a class="btn btn-default" href="/people">Читачі</a>
+            <a class="btn btn-default" href="/books/search">🔍 Пошук книг</a>
+            </div>
+            <br/>
+        </header>
+        <br/><hr><br/>
+
+        <h3>Оновити дані книги</h3>
+        <form th:method="PATCH" th:action="@{/books/{id}(id=${book.getBookId()})}" th:object="${book}">
+            <label for="title">Введіть назву книги </label>
+            <input type="text" th:field="*{title}" id="title" size="100"/>
+            <div style="color:orangered" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Name error</div>
+            <br/>
+            <label for="author">Введіть ім'я автора</label>
+            <input type="text" th:field="*{author}" id="author" size="100"/>
+            <div style="color:orangered" th:if="${#fields.hasErrors('author')}" th:errors="*{author}">Age error</div>
+            <br/>
+            <label for="yearOfProduction">Введіть рік видання</label>
+            <input type="text" th:field="*{yearOfProduction}" id="yearOfProduction" size="4"/>
+            <div style="color:orangered" th:if="${#fields.hasErrors('yearOfProduction')}" th:errors="*{yearOfProduction}">Age error</div>
+
+            <input type="submit" value="Зберегти зміни" class="btn btn-primary"/>
+        </form>
+    <!--<a th:href="@{/books/{id}(id=${book.getBookId()}) }" th:text="Скасувати зміни">Скасувати зміни</a>-->
+        <br/><br/><hr><br/><br/>
+        <a href="/books">Скасувати зміни та повернутися до списку всіх книг</a>
+
+        <br/><br/>
+        <footer>
+            <div class="text-center p-3" style="background-color: #F8F8F8; border-radius: 5px">
+                <br/>
+                <p>2023 Copyright: By me</p>
+                <br/>
+            </div>
+        </footer>
+
+    </body>
+</html>

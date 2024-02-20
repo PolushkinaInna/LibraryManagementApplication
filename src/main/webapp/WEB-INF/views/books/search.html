@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Пошук книг</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script>
+        function validateForm() {
+            // Отримання значень полів форми
+            var title = document.forms["searchForm"]["title"].value;
+            var author = document.forms["searchForm"]["author"].value;
+            var year = document.forms["searchForm"]["year"].value;
+
+            // Перевірка на пусті значення
+            if (title === "" && author === "" && year === "") {
+                alert("Будь ласка, хоча б одне поле в формі. 😉");
+                return false; // Заборонити відправку форми
+            }
+
+            // Якщо значення не пусті, форма може бути відправлена
+            return true;
+        }
+    </script>
+</head>
+    <body class="container">
+        <header style="background-color: #F8F8F8; border-radius: 5px">
+            <br/>
+            <div class="container"> <!-- Меню -->
+            <a class="btn btn-default" href="/">Стартова сторінка</a>
+            <a class="btn btn-default" href="/books">Книги</a>
+            <a class="btn btn-default" href="/people">Читачі</a>
+                <a class="btn btn-default" href="/books/search">🔍 Пошук книг</a>
+            </div>
+            <br/>
+        </header>
+        <br/><hr><br/>
+        <h3>Пошук книг</h3>
+        <form th:method="POST" th:action="@{/books/search}" name="searchForm" onsubmit="return validateForm()">
+            <label for="title">Введіть назву книги</label>
+            <input type="text" id="title" name="title" size="100"/>
+            <br/>
+            <label for="title">Введіть автора книги</label>
+            <input type="text" id="author" name="author" size="100"/>
+            <br/>
+            <label for="year">Введіть рік видання книги </label>
+            <input type="number" id="year" name="year" size="100"/>
+            <br/>
+            <input type="submit" value="Шукати" class="btn btn-primary"/>
+        </form>
+        <br/><br/><hr><br/><br/>
+
+        <div th:if="${books}" class="container">
+            <div th:if="${books.isEmpty()}">
+                <p>За даним запитом книг не знайдено</p>
+            </div>
+            <div th:if="${!books.isEmpty()}">
+                <p>Книги по вашому запиту: </p>
+            </div>
+
+            <table class="table">
+                <tr th:each="book : ${books}">
+                    <td>
+                        <a th:href="@{/books/{id}(id=${book.getBookId()}) }"
+                           th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYearOfProduction()}">book</a>
+                    </td>
+                    <td th:if="${book.getAssignedPerson() == null}">
+                        <span>Книга вільна</span>
+                    </td>
+                    <td th:if="${book.getAssignedPerson() != null}">
+                        <span>Зараз книга у <a th:href="@{/people/{id}(id=${book.getAssignedPerson().getPersonId()}) }" th:text="${book.getAssignedPerson().getFullName()}">person name</a></span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <br/><br/><hr><br/><br/>
+
+        <a href="/books">Повернутися до списку всіх книг</a>
+
+        <br/><br/>
+
+        <br/><br/>
+        <footer>
+            <div class="text-center p-3" style="background-color: #F8F8F8; border-radius: 5px">
+                <br/>
+                <p>2023 Copyright: By me ᓚᘏᗢ</p>
+                <br/>
+            </div>
+        </footer>
+    </body>
+</html>

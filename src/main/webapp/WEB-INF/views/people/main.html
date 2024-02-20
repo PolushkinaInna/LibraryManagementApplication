@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Користувачі</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+<body class="container">
+
+<header style="background-color: #F8F8F8; border-radius: 5px">
+    <br/>
+    <div class="container"> <!-- Меню -->
+        <a class="btn btn-default" href="/">Стартова сторінка</a>
+        <a class="btn btn-default" href="/books">Книги</a>
+        <a class="btn btn-default" href="/people">Читачі</a>
+        <a class="btn btn-default" href="/people/search">🔍 Пошук читачів</a>
+    </div>
+    <br/>
+</header>
+<br/><hr><br/>
+<h1>Список користувачів</h1>
+
+<a th:if="${sort == false}" class="btn btn-link" href="/people?sort_by_name=true">Відсортувати за алфавітом</a>
+
+
+<div th:each="person : ${people}" class="container">
+
+    <a th:href="@{/people/{id}(id=${person.getPersonId()})}"
+        th:text="${person.getFullName() + ', ' + person.getYearOfBirth()}">user</a>
+
+</div>
+<br/><br/><br/>
+<!-- Pagination -->
+<div class="container">
+    <p><span>Сторінка <span th:text="${currentPage + 1}"></span> з <span th:text="${totalPages}"></span>.</span></p>
+    <ul class="breadcrumb">
+        <li th:if="${currentPage > 0 && sort == false}">
+            <a th:href="@{/people(page=${currentPage - 1})}">Попередня</a>
+        </li>
+        <li th:if="${currentPage < totalPages - 1 && sort == false}">
+            <a th:href="@{/people(page=${currentPage + 1})}">Наступна</a>
+        </li>
+        <li th:if="${currentPage > 0 && sort == true}">
+            <a th:href="@{/people(page=${currentPage - 1}, sort_by_name=true)}">Попередня</a>
+        </li>
+        <li th:if="${currentPage < totalPages - 1 && sort == true}">
+            <a th:href="@{/people(page=${currentPage + 1}, sort_by_name=true)}">Наступна</a>
+        </li>
+    </ul>
+</div>
+<br><br><br><hr/>
+<a href="/people/new">Додати користувача</a>
+<br><br><br><hr/>
+<a href="/books">Перейти на сторінку з книгами</a>
+
+<br/><br/>
+<footer>
+    <div class="text-center p-3" style="background-color: #F8F8F8; border-radius: 5px">
+        <br/>
+        <p>2023 Copyright: By me</p>
+        <br/>
+    </div>
+</footer>
+</body>
+</html>

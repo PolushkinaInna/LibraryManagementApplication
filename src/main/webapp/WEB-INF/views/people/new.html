@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Додати користувача</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+<body class="container">
+
+<header style="background-color: #F8F8F8; border-radius: 5px">
+    <br/>
+    <div class="container"> <!-- Меню -->
+        <a class="btn btn-default" href="/">Стартова сторінка</a>
+        <a class="btn btn-default" href="/books">Книги</a>
+        <a class="btn btn-default" href="/people">Читачі</a>
+        <a class="btn btn-default" href="/people/search">🔍 Пошук читачів</a>
+    </div>
+    <br/>
+</header>
+<br/><hr><br/>
+
+<h3>Додати нового читача</h3>
+<form th:method="POST" th:action="@{/people}" th:object="${person}">
+    <label for="fullName">Введіть прізвище, ім'я, по-батькові(Наприклад: Іванов Іван Іванович) </label>
+    <input type="text" th:field="*{fullName}" id="fullName" size="50"/>
+    <div style="color:orangered" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}">Name error</div>
+    <br/>
+    <label for="yearOfBirth">Введіть рік народження</label>
+    <input type="text" th:field="*{yearOfBirth}" id="yearOfBirth" size="4"/>
+    <div style="color:orangered" th:if="${#fields.hasErrors('yearOfBirth')}" th:errors="*{yearOfBirth}">Age error</div>
+
+
+    <input type="submit" value="Створити" class="btn btn-primary"/>
+
+</form>
+<br/><br/><hr><br/><br/>
+<a href="/people">Скасувати зміни та повернутися до списку всіх читачів</a>
+
+<br/><br/>
+<footer>
+    <div class="text-center p-3" style="background-color: #F8F8F8; border-radius: 5px">
+        <br/>
+        <p>2023 Copyright: By me</p>
+        <br/>
+    </div>
+</footer>
+</body>
+</html>

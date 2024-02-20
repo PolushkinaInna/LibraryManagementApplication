@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Пошук читачів</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script>
+      function validateForm() {
+        // Отримання значень полів форми
+        var name = document.forms["searchForm"]["name"].value;
+        var year = document.forms["searchForm"]["year"].value;
+        // Перевірка на пусті значення
+        if (name === "" && year === "") {
+          alert("Будь ласка, хоча б одне поле в формі. 😉");
+          return false; // Заборонити відправку форми
+        }
+        // Якщо значення не пусті, форма може бути відправлена
+        return true;
+      }
+    </script>
+</head>
+  <body class="container">
+    <header style="background-color: #F8F8F8; border-radius: 5px">
+      <br/>
+      <div class="container"> <!-- Меню -->
+        <a class="btn btn-default" href="/">Стартова сторінка</a>
+        <a class="btn btn-default" href="/books">Книги</a>
+        <a class="btn btn-default" href="/people">Читачі</a>
+        <a class="btn btn-default" href="/people/search">🔍 Пошук читачів</a>
+      </div>
+      <br/>
+    </header>
+    <br/><hr><br/>
+    <h3>Пошук читачів</h3>
+    <form th:method="POST" th:action="@{/people/search}" name="searchForm" onsubmit="return validateForm()">
+      <label for="name">Введіть ім'я</label>
+      <input type="text" id="name" name="name" size="100"/>
+      <br/>
+      <label for="year">Введіть рік народження</label>
+      <input type="number" id="year" name="year" size="100"/>
+      <br/>
+      <input type="submit" value="Шукати" class="btn btn-primary"/>
+    </form>
+    <br/><br/><hr><br/><br/>
+
+    <div th:if="${people}" class="container">
+      <div th:if="${people.isEmpty()}">
+        <p>За даним запитом читачів не знайдено</p>
+      </div>
+      <div th:if="${!people.isEmpty()}">
+        <p>Читачі по вашому запиту: </p>
+      </div>
+
+      <table class="table">
+        <tr th:each="person : ${people}">
+          <td>
+            <a th:href="@{/people/{id}(id=${person.getPersonId()}) }"
+               th:text="${person.getFullName() + ', ' + person.getYearOfBirth()}">person</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <br/><br/><hr><br/><br/>
+
+    <a href="/people">Повернутися до списку всіх читачів</a>
+
+    <br/><br/>
+
+    <br/><br/>
+    <footer>
+      <div class="text-center p-3" style="background-color: #F8F8F8; border-radius: 5px">
+        <br/>
+        <p>2023 Copyright: By me ᓚᘏᗢ</p>
+        <br/>
+      </div>
+    </footer>
+</body>
+</html>

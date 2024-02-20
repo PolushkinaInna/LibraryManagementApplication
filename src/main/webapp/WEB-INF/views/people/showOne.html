@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Користувач</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+<body class="container">
+
+<header style="background-color: #F8F8F8; border-radius: 5px">
+    <br/>
+    <div class="container"> <!-- Меню -->
+        <a class="btn btn-default" href="/">Стартова сторінка</a>
+        <a class="btn btn-default" href="/books">Книги</a>
+        <a class="btn btn-default" href="/people">Читачі</a>
+        <a class="btn btn-default" href="/people/search">🔍 Пошук читачів</a>
+    </div>
+    <br/>
+</header>
+<br/><hr><br/>
+
+<h3>Сторінка читача</h3>
+
+  <p th:text="${'Ім`я: ' + person.getFullName()}" class="text-body">Name</p>
+  <p th:text="${'Рік народження: ' + person.getYearOfBirth()}" class="text-body">Year</p>
+
+  <div th:if="${bookList}" class="container">
+      <p class="text-body">Книги:</p>
+      <table th:each="book: ${bookList}" class=".table-striped">
+          <!--<tr th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYearOfProduction()}">book</tr>-->
+          <tr><a th:href="@{/books/{id}(id=${book.getBookId()})}" th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYearOfProduction()}" class="btn btn-link"
+                 th:style="${book.isExpired()} ? 'color: red' : 'color: black'"></a>
+          </tr>
+      </table>
+  </div>
+  <div th:unless="${bookList}">
+      <span>У цього читича немає жодної книги</span>
+  </div>
+
+  <br/><br/>
+  <form th:method="GET" th:action="@{/people/{id}/edit(id=${person.getPersonId()})}">
+      <input type="submit" value="Редагувати" class="btn btn-warning"/>
+  </form>
+  <br/><br/>
+  <form th:method="DELETE" th:action="@{/people/{id}(id=${person.getPersonId()})}">
+      <input type="submit" value="Видалити цього читача" class="btn btn-danger"/>
+  </form>
+<br/><br/><hr><br/><br/>
+<a href="/people">Повернутися до списку всіх читачів</a>
+
+<br/><br/>
+<footer>
+    <div class="text-center p-3" style="background-color: #F8F8F8; border-radius: 5px">
+        <br/>
+        <p>2023 Copyright: By me ᓚᘏᗢ</p>
+        <br/>
+    </div>
+</footer>
+</body>
+</html>

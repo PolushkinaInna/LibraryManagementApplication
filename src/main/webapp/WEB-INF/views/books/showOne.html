@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Книга</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script>
+        function moveBookDate() {
+            alert("Термін читання книги було продовжено ще на 14 днів😉")
+        }
+    </script>
+</head>
+<body class="container">
+
+<header style="background-color: #F8F8F8; border-radius: 5px">
+    <br/>
+    <div class="container"> <!-- Меню -->
+        <a class="btn btn-default" href="/">Стартова сторінка</a>
+        <a class="btn btn-default" href="/books">Книги</a>
+        <a class="btn btn-default" href="/people">Читачі</a>
+        <a class="btn btn-default" href="/books/search">🔍 Пошук книг</a>
+    </div>
+    <br/>
+</header>
+<br/><hr><br/>
+<div class="container">
+    <h3>Сторінка книги</h3>
+    <p th:text="${'Назва: ' + book.getTitle()}" class="text-body">title</p>
+    <p th:text="${'Автор: ' + book.getAuthor()}" class="text-body">author</p>
+    <p th:text="${'Рік видання: ' + book.getYearOfProduction()}" class="text-body">year of production</p>
+
+    <form th:method="GET" th:action="@{/books/{id}/edit(id=${book.getBookId()})}">
+        <input type="submit" value="Редагувати" class="btn btn-warning"/>
+    </form>
+    <br/><br/>
+    <form th:method="DELETE" th:action="@{/books/{id}(id=${book.getBookId()})}">
+        <input type="submit" value="Видалити цю книгу" class="btn btn-danger"/>
+    </form>
+    <br/><br/>
+    <div th:if="${bookOwner}" class="container">
+        <!--<span th:text="${'Зараз книга у ' + bookOwner.getFullName()}"></span>-->
+        <span>Зараз книга у <a th:text="${bookOwner.getFullName()}" th:href="@{/people/{id}(id=${bookOwner.getPersonId()})}">person</a></span>
+        <p>Дата отримання книги читачем <span th:text="${#dates.format(book.getTakenAt(), 'dd-MM-yyyy')}"></span>. Термін утримання 14 днів.</p>
+        <br/>
+        <form th:method="PATCH" th:action="@{/books/{id}/release(id=${book.getBookId()})}">
+            <input type="submit" value="Звільнити книгу" class="btn btn-primary"/>
+        </form>
+    </div>
+    <br/><br/>
+    <div th:if="${book.isExpired()}" class="container">
+        <p style="color: orangered">Термін утримання книги прострочений</p>
+        <form th:method="PATCH" th:action="@{/books/{id}/move(id=${book.getBookId()})}" onsubmit="moveBookDate()">
+            <input type="submit" value="Продовжити термін утримання книги" class="btn btn-primary" />
+        </form>
+    </div>
+    <div th:if="${people}">
+        <span>Книга вільна. Кому її назначити ?</span><br/>
+        <form th:method="PATCH" th:action="@{/books/{id}/assign(id=${book.getBookId()})}">
+            <select th:object="${person}" th:field="*{personId}" id="person" class="form-control">
+                <option th:each="person: ${people}" th:value="${person.personId}" th:text="${person.getFullName()}"></option>
+            </select>
+            <br/>
+            <input type="submit" value="Назначити книгу" class="btn btn-primary"/>
+        </form>
+
+    </div>
+</div>
+
+
+<br/><br/><hr><br/><br/>
+
+<a href="/books">Повернутися до списку всіх книг</a>
+
+<br/><br/>
+<footer>
+    <div class="text-center p-3" style="background-color: #F8F8F8; border-radius: 5px">
+        <br/>
+        <p>2023 Copyright: By me</p>
+        <br/>
+    </div>
+</footer>
+</body>
+</html>
